@@ -20,11 +20,14 @@
     "@capacitor/core": "^8.3.4",
     "@capacitor/filesystem": "^8.1.2",
     "@capawesome/capacitor-file-picker": "^8.0.2",
+    "@fontsource/outfit": "^5.2.8",
+    "@fontsource/playfair-display": "^5.2.8",
     "dompurify": "^3.4.7",
     "highlight.js": "^11.11.1",
     "marked": "^18.0.4"
   },
   "devDependencies": {
+    "@capacitor/assets": "^3.0.5",
     "@capacitor/cli": "^8.3.4",
     "vite": "^8.0.14"
   }

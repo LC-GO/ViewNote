@@ -1,4 +1,7 @@
 import './style.css'
+import '@fontsource/playfair-display/600.css'
+import '@fontsource/outfit/500.css'
+import '@fontsource/outfit/600.css'
 import { App } from '@capacitor/app'
 import { detectType, renderMarkdownTo, highlightCode } from './render.js'
 import {
@@ -198,26 +201,57 @@ function goHome() {
 function renderHome() {
   const recents = getRecents()
   app.innerHTML = `
-    <header class="topbar">
-      <div class="brand">📄 ViewNote</div>
-      <button class="icon-btn" id="appearance-btn" title="外观">Aa</button>
+    <header class="topbar topbar-home">
+      <div class="tb-left">
+        <span class="studio-logo" title="pigo studio">
+          <svg class="studio-svg" viewBox="0 0 200 42" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="pigo studio">
+            <rect x="0" y="4" width="38" height="34" rx="17" fill="#F97066" />
+            <circle cx="13" cy="21" r="4.5" fill="#fff" opacity="0.55" />
+            <circle cx="25" cy="21" r="4.5" fill="#fff" opacity="0.55" />
+            <text x="48" y="20" font-family="Outfit, sans-serif" font-size="22" fill="currentColor" font-weight="600" letter-spacing="-0.3">pigo</text>
+            <text x="48" y="36" font-family="Outfit, sans-serif" font-size="11" fill="#F97066" font-weight="500" letter-spacing="2.5">STUDIO</text>
+          </svg>
+        </span>
+      </div>
+      <div class="tb-center"><span class="app-name">ViewNote</span></div>
+      <div class="tb-right">
+        <button class="icon-btn" id="appearance-btn" title="外观">Aa</button>
+      </div>
     </header>
     <main class="home">
-      <div class="actions">
-        <button class="primary-btn" id="open-file-btn">📂 打开文件</button>
-        <button class="secondary-btn" id="browse-btn">🗂️ 浏览文件夹</button>
-      </div>
+      <section class="hero">
+        <h1 class="hero-title">阅读你的文档</h1>
+        <p class="hero-sub">优雅地查看 Markdown 与 HTML 文件</p>
+      </section>
+      <section class="action-grid">
+        <button class="action-card" id="open-file-btn">
+          <span class="action-tile">📂</span>
+          <span class="action-title">打开文件</span>
+          <span class="action-sub">选择单个文件</span>
+        </button>
+        <button class="action-card" id="browse-btn">
+          <span class="action-tile">🗂️</span>
+          <span class="action-title">浏览文件夹</span>
+          <span class="action-sub">浏览目录</span>
+        </button>
+      </section>
       <section class="recents">
-        <h2>最近打开</h2>
+        <h2 class="section-title">最近打开</h2>
         ${
           recents.length === 0
-            ? `<p class="empty">还没有打开过文件。<br>点上面的按钮选一个 <b>.md</b> 或 <b>.html</b> 文件试试。</p>`
+            ? `<div class="empty-state">
+                 <div class="empty-icon">📭</div>
+                 <p class="empty-text">还没有打开过文件<small>点上面的按钮选一个 .md 或 .html 文件试试</small></p>
+               </div>`
             : `<ul class="recent-list">${recents
                 .map(
                   (r, i) => `
               <li class="recent-item" data-index="${i}">
-                <span class="recent-icon">${r.type === 'html' ? '🌐' : '📝'}</span>
-                <span class="recent-name">${escapeHtml(r.name)}</span>
+                <span class="recent-tile">${r.type === 'html' ? '🌐' : '📝'}</span>
+                <span class="recent-info">
+                  <span class="recent-name">${escapeHtml(r.name)}</span>
+                  <span class="recent-meta">${r.type === 'html' ? 'HTML' : 'Markdown'}</span>
+                </span>
                 <button class="recent-del" data-del="${i}" title="移除">✕</button>
               </li>`,
                 )
@@ -360,15 +394,15 @@ async function renderBrowser() {
       ...dirs.map(
         (d) => `
         <li class="recent-item" data-dir="${escapeAttr(d.name)}">
-          <span class="recent-icon">📁</span>
-          <span class="recent-name">${escapeHtml(d.name)}</span>
+          <span class="recent-tile">📁</span>
+          <span class="recent-info"><span class="recent-name">${escapeHtml(d.name)}</span></span>
         </li>`,
       ),
       ...docs.map(
         (d) => `
         <li class="recent-item" data-file="${escapeAttr(d.uri || '')}" data-name="${escapeAttr(d.name)}">
-          <span class="recent-icon">${/\.html?$/i.test(d.name) ? '🌐' : '📝'}</span>
-          <span class="recent-name">${escapeHtml(d.name)}</span>
+          <span class="recent-tile">${/\.html?$/i.test(d.name) ? '🌐' : '📝'}</span>
+          <span class="recent-info"><span class="recent-name">${escapeHtml(d.name)}</span></span>
         </li>`,
       ),
     ].join('')

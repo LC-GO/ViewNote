@@ -1,6 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -8,7 +7,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode|navigation|density"
             android:name=".MainActivity"
@@ -16,24 +14,54 @@
             android:theme="@style/AppTheme.NoActionBarLaunch"
             android:launchMode="singleTask"
             android:exported="true">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
-            <!-- 「打开方式」：点击/查看 html、md、txt 等文本文件 -->
+            <!-- 「打开方式」A：按 MIME 匹配（文件被正确判定为文本类型时）-->
             <intent-filter android:label="@string/app_name">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="content" />
                 <data android:scheme="file" />
-                <data android:mimeType="text/html" />
-                <data android:mimeType="text/plain" />
-                <data android:mimeType="text/markdown" />
-                <data android:mimeType="text/x-markdown" />
+                <data android:mimeType="text/*" />
                 <data android:mimeType="application/xhtml+xml" />
+            </intent-filter>
+
+            <!-- 「打开方式」B：按文件后缀匹配（任意 MIME，解决 .md 被判成 octet-stream 时不出现的问题）-->
+            <intent-filter android:label="@string/app_name">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="content" />
+                <data android:scheme="file" />
+                <data android:host="*" />
+                <data android:mimeType="*/*" />
+                <data android:pathPattern=".*md" />
+                <data android:pathPattern=".*markdown" />
+                <data android:pathPattern=".*mdown" />
+                <data android:pathPattern=".*mkd" />
+                <data android:pathPattern=".*mkdn" />
+                <data android:pathPattern=".*html" />
+                <data android:pathPattern=".*htm" />
+                <data android:pathPattern=".*txt" />
+            </intent-filter>
+
+            <!-- 「打开方式」C：按后缀匹配且不带 MIME（兜底：文件管理器发出不带 type 的 VIEW）-->
+            <intent-filter android:label="@string/app_name">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="content" />
+                <data android:scheme="file" />
+                <data android:host="*" />
+                <data android:pathPattern=".*md" />
+                <data android:pathPattern=".*markdown" />
+                <data android:pathPattern=".*mdown" />
+                <data android:pathPattern=".*mkd" />
+                <data android:pathPattern=".*mkdn" />
+                <data android:pathPattern=".*html" />
+                <data android:pathPattern=".*htm" />
+                <data android:pathPattern=".*txt" />
             </intent-filter>
 
             <!-- 分享菜单：从其他 APP 分享文本/文件到 ViewNote -->
@@ -42,7 +70,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="text/*" />
             </intent-filter>
-
         </activity>
 
         <provider
@@ -50,9 +77,7 @@
             android:authorities="${applicationId}.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"></meta-data>
+            <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/file_paths" />
         </provider>
     </application>
 
@@ -60,7 +85,5 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- 文件夹浏览（Android 12 及以下读取外部存储；13+ 受分区存储限制，建议用「打开文件/打开方式」）-->
-    <uses-permission
-        android:name="android.permission.READ_EXTERNAL_STORAGE"
-        android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
 </manifest>
