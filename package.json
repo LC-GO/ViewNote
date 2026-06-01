@@ -1,0 +1,31 @@
+{
+  "name": "viewnote",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "在 Android 手机上查看 HTML 和 Markdown 文件的 APP",
+  "license": "MIT",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview --host",
+    "cap:sync": "cap sync",
+    "cap:android": "cap open android",
+    "android": "vite build && cap sync android && cap open android",
+    "apk": "vite build && cap sync android && cd android && gradlew.bat assembleDebug"
+  },
+  "dependencies": {
+    "@capacitor/android": "^8.3.4",
+    "@capacitor/app": "^8.1.0",
+    "@capacitor/core": "^8.3.4",
+    "@capacitor/filesystem": "^8.1.2",
+    "@capawesome/capacitor-file-picker": "^8.0.2",
+    "dompurify": "^3.4.7",
+    "highlight.js": "^11.11.1",
+    "marked": "^18.0.4"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^8.3.4",
+    "vite": "^8.0.14"
+  }
+}

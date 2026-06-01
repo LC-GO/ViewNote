@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <style>
+      body {
+        font-family: sans-serif;
+        padding: 24px;
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        color: white;
+      }
+      .card {
+        background: rgba(255, 255, 255, 0.15);
+        border-radius: 16px;
+        padding: 20px;
+        backdrop-filter: blur(8px);
+      }
+      button {
+        padding: 10px 18px;
+        border: none;
+        border-radius: 8px;
+        font-size: 15px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <h1>HTML 预览测试 🌐</h1>
+      <p>这个页面带有自己的样式和脚本，用来验证 iframe 沙箱预览。</p>
+      <p>点击次数：<span id="count">0</span></p>
+      <button onclick="document.getElementById('count').textContent = ++window.n || (window.n = 1)">
+        点我 +1
+      </button>
+    </div>
+  </body>
+</html>

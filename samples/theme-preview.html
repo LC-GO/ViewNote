@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="github-light" data-font="sans">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>ViewNote 主题预览</title>
+    <style>
+      /* ============ 主题色板（8 套，参考知名设计系统/编辑器）============ */
+      :root { --fs: 16px; --lh: 1.75; }
+
+      /* —— 浅色系 —— */
+      /* GitHub 浅色 */
+      [data-theme='github-light'] {
+        --bg:#ffffff; --bg-elev:#f6f8fa; --text:#1f2328; --text-dim:#656d76; --heading:#1f2328; --border:#d0d7de;
+        --link:#0969da; --quote-bar:#d0d7de; --inline-code-bg:#eff1f3; --inline-code-fg:#1f2328; --code-bg:#f6f8fa; --code-fg:#1f2328;
+        --tok-key:#cf222e; --tok-str:#0a3069; --tok-com:#6e7781; --tok-fun:#8250df; --tok-num:#0550ae;
+        --table-stripe:#f6f8fa; --note:#0969da; --warn:#9a6700;
+      }
+      /* Notion 风（柔和护眼白）*/
+      [data-theme='notion'] {
+        --bg:#ffffff; --bg-elev:#f7f6f3; --text:#37352f; --text-dim:#787774; --heading:#37352f; --border:#e9e9e7;
+        --link:#2383e2; --quote-bar:#d3d1cb; --inline-code-bg:#f1f0ee; --inline-code-fg:#eb5757; --code-bg:#f7f6f3; --code-fg:#37352f;
+        --tok-key:#eb5757; --tok-str:#0b8043; --tok-com:#9b9a97; --tok-fun:#2383e2; --tok-num:#cb912f;
+        --table-stripe:#f7f6f3; --note:#2383e2; --warn:#cb912f;
+      }
+      /* 护眼纸张 Sepia */
+      [data-theme='sepia'] {
+        --bg:#f4ecd8; --bg-elev:#ece0c4; --text:#5b4636; --text-dim:#8a7659; --heading:#433422; --border:#d9c7a3;
+        --link:#9a5b27; --quote-bar:#c9b283; --inline-code-bg:#e6d7b8; --inline-code-fg:#5b4636; --code-bg:#ece0c4; --code-fg:#4a3a2a;
+        --tok-key:#b3402f; --tok-str:#4f6d28; --tok-com:#9a8763; --tok-fun:#8a5a1f; --tok-num:#7a5520;
+        --table-stripe:#ece0c4; --note:#9a5b27; --warn:#9a6700;
+      }
+      /* Solarized Light */
+      [data-theme='solarized-light'] {
+        --bg:#fdf6e3; --bg-elev:#eee8d5; --text:#586e75; --text-dim:#93a1a1; --heading:#073642; --border:#e3dcc4;
+        --link:#268bd2; --quote-bar:#d6cfb8; --inline-code-bg:#eee8d5; --inline-code-fg:#586e75; --code-bg:#eee8d5; --code-fg:#586e75;
+        --tok-key:#859900; --tok-str:#2aa198; --tok-com:#93a1a1; --tok-fun:#268bd2; --tok-num:#d33682;
+        --table-stripe:#eee8d5; --note:#268bd2; --warn:#b58900;
+      }
+      /* Catppuccin Latte */
+      [data-theme='latte'] {
+        --bg:#eff1f5; --bg-elev:#e6e9ef; --text:#4c4f69; --text-dim:#6c6f85; --heading:#4c4f69; --border:#ccd0da;
+        --link:#1e66f5; --quote-bar:#bcc0cc; --inline-code-bg:#dce0e8; --inline-code-fg:#4c4f69; --code-bg:#e6e9ef; --code-fg:#4c4f69;
+        --tok-key:#8839ef; --tok-str:#40a02b; --tok-com:#8c8fa1; --tok-fun:#1e66f5; --tok-num:#fe640b;
+        --table-stripe:#e6e9ef; --note:#1e66f5; --warn:#df8e1d;
+      }
+
+      /* —— 深色系 —— */
+      /* GitHub 深色 */
+      [data-theme='github-dark'] {
+        --bg:#0d1117; --bg-elev:#161b22; --text:#e6edf3; --text-dim:#8b949e; --heading:#e6edf3; --border:#30363d;
+        --link:#2f81f7; --quote-bar:#30363d; --inline-code-bg:#2a2f37; --inline-code-fg:#e6edf3; --code-bg:#161b22; --code-fg:#e6edf3;
+        --tok-key:#ff7b72; --tok-str:#a5d6ff; --tok-com:#8b949e; --tok-fun:#d2a8ff; --tok-num:#79c0ff;
+        --table-stripe:#161b22; --note:#2f81f7; --warn:#d29922;
+      }
+      /* OLED 纯黑 */
+      [data-theme='oled'] {
+        --bg:#000000; --bg-elev:#0d0d0d; --text:#c9d1d9; --text-dim:#7d8590; --heading:#e6edf3; --border:#1f1f1f;
+        --link:#4493f8; --quote-bar:#2a2a2a; --inline-code-bg:#161616; --inline-code-fg:#c9d1d9; --code-bg:#0a0a0a; --code-fg:#c9d1d9;
+        --tok-key:#ff7b72; --tok-str:#a5d6ff; --tok-com:#7d8590; --tok-fun:#d2a8ff; --tok-num:#79c0ff;
+        --table-stripe:#0d0d0d; --note:#4493f8; --warn:#d29922;
+      }
+      /* One Dark（Atom 经典）*/
+      [data-theme='one-dark'] {
+        --bg:#282c34; --bg-elev:#21252b; --text:#abb2bf; --text-dim:#5c6370; --heading:#e6e6e6; --border:#3e4451;
+        --link:#61afef; --quote-bar:#3e4451; --inline-code-bg:#2c313a; --inline-code-fg:#abb2bf; --code-bg:#21252b; --code-fg:#abb2bf;
+        --tok-key:#c678dd; --tok-str:#98c379; --tok-com:#5c6370; --tok-fun:#61afef; --tok-num:#d19a66;
+        --table-stripe:#2c313a; --note:#61afef; --warn:#e5c07b;
+      }
+
+      /* ============ 字体栈 ============ */
+      [data-font='sans'] .doc {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', Roboto, Helvetica, Arial, sans-serif;
+      }
+      [data-font='serif'] .doc {
+        font-family: Georgia, Cambria, 'Times New Roman', 'Songti SC', 'SimSun', 'Noto Serif CJK SC', 'Source Han Serif SC', serif;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+      body { background: var(--bg); color: var(--text); transition: background .2s, color .2s; }
+
+      /* ============ 控制条 ============ */
+      .controls {
+        position: sticky; top: 0; z-index: 10; background: var(--bg-elev);
+        border-bottom: 1px solid var(--border); padding: 8px 12px; padding-top: calc(8px + env(safe-area-inset-top));
+        display: flex; flex-direction: column; gap: 7px;
+        font: 12px/1.4 -apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif;
+      }
+      .row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+      .label { color: var(--text-dim); margin-right: 4px; min-width: 30px; }
+      .sub { color: var(--text-dim); opacity: .7; margin: 0 2px 0 4px; }
+      .chip {
+        border: 1px solid var(--border); background: var(--bg); color: var(--text);
+        border-radius: 999px; padding: 4px 9px; cursor: pointer; font-size: 12px; line-height: 1; white-space: nowrap;
+        display: inline-flex; align-items: center; gap: 5px;
+      }
+      .chip.active { background: var(--link); color: #fff; border-color: var(--link); }
+      .swatch { width: 12px; height: 12px; border-radius: 50%; border: 1px solid rgba(128,128,128,.45); flex: 0 0 auto; }
+
+      /* ============ 文档排版（= APP 里 .markdown-body 的目标样式）============ */
+      .doc {
+        max-width: 720px; margin: 0 auto; padding: 22px 18px calc(60px + env(safe-area-inset-bottom));
+        font-size: var(--fs); line-height: var(--lh); color: var(--text); word-wrap: break-word;
+      }
+      .doc h1, .doc h2, .doc h3 { color: var(--heading); line-height: 1.3; margin: 1.5em 0 .6em; font-weight: 700; }
+      .doc h1 { font-size: 1.8em; border-bottom: 1px solid var(--border); padding-bottom: .3em; margin-top: .2em; }
+      .doc h2 { font-size: 1.45em; border-bottom: 1px solid var(--border); padding-bottom: .3em; }
+      .doc h3 { font-size: 1.2em; }
+      .doc p { margin: .85em 0; }
+      .doc a { color: var(--link); text-decoration: none; }
+      .doc a:hover { text-decoration: underline; }
+      .doc del { opacity: .7; }
+      .doc img { max-width: 100%; height: auto; border-radius: 8px; display: block; margin: 1em 0; }
+      .doc hr { border: none; border-top: 1px solid var(--border); margin: 1.8em 0; }
+      .doc blockquote { margin: 1em 0; padding: .3em 1em; color: var(--text-dim); border-left: 4px solid var(--quote-bar); }
+      .doc ul, .doc ol { padding-left: 1.6em; margin: .85em 0; }
+      .doc li { margin: .35em 0; }
+      .doc .task { list-style: none; padding-left: 0; }
+      .doc .task li { display: flex; align-items: center; gap: .5em; }
+      .doc code {
+        background: var(--inline-code-bg); color: var(--inline-code-fg); padding: .15em .4em; border-radius: 5px;
+        font-size: .88em; font-family: 'SF Mono', 'Cascadia Code', Consolas, 'Courier New', monospace;
+      }
+      .doc pre {
+        background: var(--code-bg); color: var(--code-fg); border: 1px solid var(--border); border-radius: 10px;
+        padding: 14px 16px; overflow-x: auto; margin: 1em 0; line-height: 1.55;
+      }
+      .doc pre code { background: none; color: inherit; padding: 0; font-size: .85em; }
+      .doc pre .k { color: var(--tok-key); }
+      .doc pre .s { color: var(--tok-str); }
+      .doc pre .c { color: var(--tok-com); font-style: italic; }
+      .doc pre .f { color: var(--tok-fun); }
+      .doc pre .n { color: var(--tok-num); }
+      .doc table { border-collapse: collapse; width: 100%; margin: 1em 0; display: block; overflow-x: auto; }
+      .doc th, .doc td { border: 1px solid var(--border); padding: 8px 12px; text-align: left; }
+      .doc th { background: var(--bg-elev); font-weight: 600; }
+      .doc tbody tr:nth-child(even) { background: var(--table-stripe); }
+      .alert { border-left: 4px solid; border-radius: 6px; padding: .6em 1em; margin: 1em 0; background: color-mix(in srgb, var(--bg-elev) 70%, transparent); }
+      .alert .alert-title { font-weight: 700; display: flex; align-items: center; gap: .4em; margin-bottom: .3em; }
+      .alert.note { border-color: var(--note); } .alert.note .alert-title { color: var(--note); }
+      .alert.warn { border-color: var(--warn); } .alert.warn .alert-title { color: var(--warn); }
+    </style>
+  </head>
+  <body>
+    <div class="controls">
+      <div class="row">
+        <span class="label">主题</span>
+        <span class="sub">浅</span>
+        <button class="chip" data-set="theme" data-val="github-light"><span class="swatch" style="background:linear-gradient(135deg,#fff 50%,#0969da 50%)"></span>GitHub 浅</button>
+        <button class="chip" data-set="theme" data-val="notion"><span class="swatch" style="background:linear-gradient(135deg,#fff 50%,#2383e2 50%)"></span>Notion</button>
+        <button class="chip" data-set="theme" data-val="sepia"><span class="swatch" style="background:linear-gradient(135deg,#f4ecd8 50%,#9a5b27 50%)"></span>纸张</button>
+        <button class="chip" data-set="theme" data-val="solarized-light"><span class="swatch" style="background:linear-gradient(135deg,#fdf6e3 50%,#268bd2 50%)"></span>Solarized</button>
+        <button class="chip" data-set="theme" data-val="latte"><span class="swatch" style="background:linear-gradient(135deg,#eff1f5 50%,#1e66f5 50%)"></span>Latte</button>
+      </div>
+      <div class="row">
+        <span class="label"></span>
+        <span class="sub">深</span>
+        <button class="chip" data-set="theme" data-val="github-dark"><span class="swatch" style="background:linear-gradient(135deg,#0d1117 50%,#2f81f7 50%)"></span>GitHub 深</button>
+        <button class="chip" data-set="theme" data-val="oled"><span class="swatch" style="background:linear-gradient(135deg,#000 50%,#4493f8 50%)"></span>纯黑</button>
+        <button class="chip" data-set="theme" data-val="one-dark"><span class="swatch" style="background:linear-gradient(135deg,#282c34 50%,#61afef 50%)"></span>One Dark</button>
+      </div>
+      <div class="row">
+        <span class="label">字体</span>
+        <button class="chip" data-set="font" data-val="sans">无衬线</button>
+        <button class="chip" data-set="font" data-val="serif">衬线</button>
+        <span class="sub">字号</span>
+        <button class="chip" id="fs-minus">A−</button>
+        <button class="chip" id="fs-plus">A+</button>
+        <span class="sub">行距</span>
+        <button class="chip" data-set="lh" data-val="1.5">紧凑</button>
+        <button class="chip" data-set="lh" data-val="1.75">标准</button>
+        <button class="chip" data-set="lh" data-val="2.0">宽松</button>
+      </div>
+    </div>
+
+    <article class="doc">
+      <h1>ViewNote 主题预览</h1>
+      <p>
+        这是一段示例正文，用来预览不同<strong>主题</strong>、<em>字体</em>与
+        <del>排版</del>的实际效果。上方共 <code>8 套</code>主题（浅色 5 + 深色 3），
+        切换 <code>字体 / 字号 / 行距</code> 看看哪套读起来最舒服。更多说明见 <a href="#">这个链接</a>。
+      </p>
+
+      <div class="alert note">
+        <div class="alert-title">ⓘ 提示 NOTE</div>
+        GitHub 风格提示框（<code>&gt; [!NOTE]</code>），强调重要信息。
+      </div>
+      <div class="alert warn">
+        <div class="alert-title">⚠ 注意 WARNING</div>
+        警告提示框（<code>&gt; [!WARNING]</code>），配色随主题协调变化。
+      </div>
+
+      <h2>列表与任务</h2>
+      <ul>
+        <li>无序列表项 A</li>
+        <li>无序列表项 B<ul><li>嵌套子项</li></ul></li>
+      </ul>
+      <ol><li>有序第一项</li><li>有序第二项</li></ol>
+      <ul class="task">
+        <li><input type="checkbox" checked disabled /> 已完成的任务</li>
+        <li><input type="checkbox" disabled /> 待办的任务</li>
+      </ul>
+
+      <blockquote>引用文字：阅读优先是 ViewNote 的核心原则——排版舒适、明暗皆宜。</blockquote>
+
+      <h2>代码</h2>
+      <p>行内代码 <code>const x = 42</code> 有底色。下面是跟随主题明暗的代码块：</p>
+      <pre><code><span class="k">function</span> <span class="f">greet</span>(name) {
+  <span class="k">const</span> msg = <span class="s">`Hello, ${name}!`</span>; <span class="c">// 模板字符串</span>
+  console.<span class="f">log</span>(msg);
+  <span class="k">return</span> msg.length; <span class="c">// 返回长度</span>
+}</code></pre>
+
+      <h2>表格</h2>
+      <table>
+        <thead><tr><th>功能</th><th>状态</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td>Markdown</td><td>✅</td><td>标题/列表/表格/高亮</td></tr>
+          <tr><td>HTML</td><td>✅</td><td>沙箱预览 + 源码</td></tr>
+          <tr><td>主题</td><td>🔜</td><td>8 套阅读主题</td></tr>
+        </tbody>
+      </table>
+
+      <h3>图片</h3>
+      <img alt="示例图" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='640' height='150'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%236366f1'/><stop offset='1' stop-color='%238b5cf6'/></linearGradient></defs><rect width='640' height='150' rx='12' fill='url(%23g)'/><text x='320' y='86' font-size='26' fill='white' text-anchor='middle' font-family='sans-serif'>图片自适应宽度 + 圆角</text></svg>" />
+
+      <hr />
+      <p style="color: var(--text-dim); font-size: .9em;">— 预览结束。选好喜欢的组合告诉我，我把它定为默认并集成进 APP。</p>
+    </article>
+
+    <script>
+      var root = document.documentElement;
+      var SIZES = [13, 14, 15, 16, 17, 18, 20, 22];
+      // localStorage 在 file:// 或沙箱环境可能抛异常，统一包一层避免脚本中断
+      function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+      function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+      var state = {
+        theme: lsGet('tp.theme') || 'github-light',
+        font: lsGet('tp.font') || 'sans',
+        fs: Number(lsGet('tp.fs')) || 16,
+        lh: lsGet('tp.lh') || '1.75',
+      };
+      // 若记忆的主题已被移除，回退到默认，避免页面没有样式变量
+      if (!document.querySelector('.chip[data-val="' + state.theme + '"]')) state.theme = 'github-light';
+      function apply() {
+        root.setAttribute('data-theme', state.theme);
+        root.setAttribute('data-font', state.font);
+        root.style.setProperty('--fs', state.fs + 'px');
+        root.style.setProperty('--lh', state.lh);
+        document.querySelectorAll('.chip[data-set]').forEach(function (c) {
+          var on = state[c.dataset.set] === c.dataset.val ||
+                   (c.dataset.set === 'lh' && Number(state.lh) === Number(c.dataset.val));
+          c.classList.toggle('active', on);
+        });
+        lsSet('tp.theme', state.theme);
+        lsSet('tp.font', state.font);
+        lsSet('tp.fs', state.fs);
+        lsSet('tp.lh', state.lh);
+      }
+      document.querySelectorAll('.chip[data-set]').forEach(function (c) {
+        c.addEventListener('click', function () { state[c.dataset.set] = c.dataset.val; apply(); });
+      });
+      document.getElementById('fs-plus').addEventListener('click', function () {
+        var i = SIZES.indexOf(state.fs); state.fs = SIZES[Math.min(i + 1, SIZES.length - 1)] || 16; apply();
+      });
+      document.getElementById('fs-minus').addEventListener('click', function () {
+        var i = SIZES.indexOf(state.fs); state.fs = SIZES[Math.max(i - 1, 0)] || 16; apply();
+      });
+      apply();
+    </script>
+  </body>
+</html>

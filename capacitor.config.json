@@ -1,0 +1,8 @@
+{
+  "appId": "com.viewnote.app",
+  "appName": "ViewNote",
+  "webDir": "dist",
+  "server": {
+    "androidScheme": "https"
+  }
+}
