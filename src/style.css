@@ -227,6 +227,19 @@ body {
 .markdown-body th { background: var(--bg-elev); font-weight: 600; }
 .markdown-body tbody tr:nth-child(even) { background: var(--table-stripe); }
 
+/* Mermaid 图表（白底卡片，明暗主题都可读）*/
+.markdown-body .mermaid-diagram {
+  background: #ffffff; border: 1px solid var(--border); border-radius: 10px;
+  padding: 12px; margin: 1em 0; overflow-x: auto; text-align: center;
+}
+.markdown-body .mermaid-diagram svg { max-width: 100%; height: auto; }
+.markdown-body .mermaid-loading { color: var(--text-dim); font-size: 14px; padding: 28px 12px; }
+.markdown-body .mermaid-error {
+  color: #b3261e; background: #fff5f5; border-color: #f3c0c0;
+  font-size: 12px; text-align: left; white-space: pre-wrap;
+  font-family: 'SF Mono', Consolas, monospace;
+}
+
 /* ============ 外观面板（底部弹出）============ */
 .chip {
   border: 1px solid var(--border); background: var(--bg-elev); color: var(--text);
