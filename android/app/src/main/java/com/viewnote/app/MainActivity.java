@@ -10,6 +10,7 @@ public class MainActivity extends BridgeActivity {
     public void onCreate(Bundle savedInstanceState) {
         // 注册自定义插件（必须在 super.onCreate 之前）
         registerPlugin(FileOpenPlugin.class);
+        registerPlugin(SafPlugin.class);
         super.onCreate(savedInstanceState);
     }
 

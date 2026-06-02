@@ -24,7 +24,9 @@
     "@fontsource/playfair-display": "^5.2.8",
     "dompurify": "^3.4.7",
     "highlight.js": "^11.11.1",
+    "katex": "^0.17.0",
     "marked": "^18.0.4",
+    "marked-katex-extension": "^5.1.10",
     "mermaid": "^11.15.0"
   },
   "devDependencies": {

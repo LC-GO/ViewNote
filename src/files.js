@@ -86,6 +86,34 @@ export async function readEntryAsText(uri) {
   return readPathAsText(uri)
 }
 
+// ---------- 方式二（增强）：SAF 文件夹授权 ----------
+const Saf = registerPlugin('Saf')
+
+export const saf = {
+  pickFolder: () => Saf.pickFolder(), // -> {treeUri, docId, name}
+  list: async (treeUri, docId) => (await Saf.list({ treeUri, docId })).entries,
+  readText: async (uri) => (await Saf.readText({ uri })).text,
+  readImage: async (treeUri, dirDocId, relPath) =>
+    (await Saf.readRelativeImage({ treeUri, dirDocId, relPath })).dataUrl,
+}
+
+// 已授权的文件夹列表（持久化）
+const SAF_KEY = 'viewnote.safFolders'
+export function getSafFolders() {
+  try { return JSON.parse(localStorage.getItem(SAF_KEY)) || [] } catch { return [] }
+}
+export function addSafFolder(folder) {
+  const list = getSafFolders().filter((f) => f.treeUri !== folder.treeUri)
+  list.unshift(folder)
+  try { localStorage.setItem(SAF_KEY, JSON.stringify(list.slice(0, 10))) } catch { /* 忽略 */ }
+  return list
+}
+export function removeSafFolder(treeUri) {
+  const list = getSafFolders().filter((f) => f.treeUri !== treeUri)
+  try { localStorage.setItem(SAF_KEY, JSON.stringify(list)) } catch { /* 忽略 */ }
+  return list
+}
+
 // ---------- 方式三：从其他 APP「打开方式 / 分享」接收 ----------
 // 由原生 FileOpenPlugin 统一处理 ACTION_VIEW 与 ACTION_SEND，直接返回文本内容
 export async function getSharedFile() {
@@ -113,9 +141,9 @@ export function getRecents() {
   }
 }
 
-export function addRecent({ name, type, text }) {
+export function addRecent({ name, type, text, safContext }) {
   const list = getRecents().filter((r) => r.name !== name)
-  list.unshift({ name, type, text, ts: Date.now() })
+  list.unshift({ name, type, text, safContext, ts: Date.now() })
   const trimmed = list.slice(0, MAX_RECENTS)
   try {
     localStorage.setItem(RECENTS_KEY, JSON.stringify(trimmed))

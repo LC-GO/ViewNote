@@ -3,11 +3,15 @@
 import { marked } from 'marked'
 import DOMPurify from 'dompurify'
 import hljs from 'highlight.js/lib/common'
+import markedKatex from 'marked-katex-extension'
+import 'katex/dist/katex.min.css'
 
 marked.setOptions({
   gfm: true, // 支持 GitHub 风格 Markdown（表格、删除线等）
   breaks: false, // 单个换行不强制换行，符合标准 Markdown
 })
+// LaTeX 数学公式：$...$ 行内，$$...$$ 块级（KaTeX）
+marked.use(markedKatex({ throwOnError: false, output: 'html' }))
 
 // 根据文件名后缀（必要时看内容）判断文件类型
 export function detectType(name = '', content = '') {
